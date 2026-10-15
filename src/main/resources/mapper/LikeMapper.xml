@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myk.emotionalHole.mapper.LikeMapper">
+    
+    <!-- 获取用户点赞的内容列表 -->
+    <select id="getMyLikes" resultMap="com.myk.emotionalHole.mapper.ContentMapper.ContentResultMap">
+        SELECT c.*, t.topic_name as topicName, u.avatar FROM content c
+        LEFT JOIN topic t ON c.topic_id = t.id
+        LEFT JOIN user u ON c.anonymous_id = u.anonymous_id
+        JOIN `like` l ON c.id = l.target_id
+        WHERE l.anonymous_id = #{anonymousId} AND l.target_type = 1
+        ORDER BY l.create_time DESC
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+    
+    <!-- 批量获取点赞数量 -->
+    <select id="batchGetLikeCount" resultType="java.util.Map">
+        SELECT target_id as targetId, COUNT(*) as count
+        FROM `like`
+        WHERE target_type = #{targetType}
+          AND target_id IN
+        <foreach collection="targetIds" item="targetId" open="(" separator="," close=")">
+            #{targetId}
+        </foreach>
+        GROUP BY target_id
+    </select>
+
+</mapper>

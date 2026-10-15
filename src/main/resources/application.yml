@@ -1,0 +1,81 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/emotional_hole?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: "052905"
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      database: ${REDIS_DATABASE:0}
+      timeout: 3s
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 50MB
+      file-size-threshold: 2KB
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  type-aliases-package: com.myk.emotionalHole.entity
+  mapper-locations: classpath*:mapper/*.xml
+  global-config:
+    banner: false
+    db-config:
+      id-type: auto
+
+wechat:
+  app-id: ${WECHAT_APP_ID:wx9bf61088be6b809b}
+  app-secret: ${WECHAT_APP_SECRET:}
+  jscode2session-url: https://api.weixin.qq.com/sns/jscode2session
+
+ai:
+  api-key: ${AI_API_KEY:}
+  timeout: 3000
+  agent-api-url: https://qianfan.baidubce.com/v2/app/conversation/runs
+  chat-agent-id: ${AI_CHAT_AGENT_ID:928ec440-e0a6-4555-a1e2-3be06d9ca902}
+  audit-agent-id: ${AI_AUDIT_AGENT_ID:0c37aa71-1c78-4a9e-ab73-3b2fbf296375}
+
+file:
+  upload:
+    path: uploads/images
+    url-prefix: /images/
+    allowed-types: jpg,jpeg,png,gif,webp
+
+# MinIO 对象存储
+minio:
+  endpoint: ${MINIO_ENDPOINT:http://127.0.0.1:9000}
+  access-key: ${MINIO_ACCESS_KEY:}
+  secret-key: ${MINIO_SECRET_KEY:}
+  bucket-name: ${MINIO_BUCKET_NAME:b2312}
+  # 对外访问前缀：生产环境可配置公网域名（如 https://cdn.example.com），不配置时默认使用 endpoint
+  access-path: ${MINIO_ACCESS_PATH:http://127.0.0.1:9000}
+
+# 百度文本内容审核（确定性机器过滤层，作为 AI 审核的前置兜底）
+baidu-audit:
+  enabled: ${BAIDU_AUDIT_ENABLED:true}
+  app-id: ${BAIDU_AUDIT_APP_ID:123779013}
+  api-key: ${BAIDU_AUDIT_API_KEY:}
+  secret-key: ${BAIDU_AUDIT_SECRET_KEY:}
+  token-url: https://aip.baidubce.com/oauth/2.0/token
+  text-censor-url: https://aip.baidubce.com/rest/2.0/solution/v1/text_censor/v2/user_defined
+
+jwt:
+  secret: ${JWT_SECRET:your_jwt_secret_at_least_32_chars_long}
+  admin-secret: ${JWT_ADMIN_SECRET:your_admin_jwt_secret_at_least_32_chars}
+  access-token-expiration: 7200000
+  refresh-token-expiration: 604800000
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html

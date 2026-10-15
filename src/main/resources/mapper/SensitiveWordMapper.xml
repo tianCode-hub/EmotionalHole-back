@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myk.emotionalHole.mapper.SensitiveWordMapper">
+
+    <!-- 批量插入敏感词 -->
+    <insert id="batchInsertSensitiveWords" parameterType="java.util.List">
+        insert into sensitive_word (word, keyword_type, create_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.word}, #{item.keywordType}, #{item.createTime})
+        </foreach>
+    </insert>
+
+</mapper>

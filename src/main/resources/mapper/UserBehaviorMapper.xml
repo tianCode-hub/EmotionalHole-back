@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myk.emotionalHole.mapper.UserBehaviorMapper">
+
+    <!-- 获取用户最近浏览的内容ID列表 -->
+    <select id="selectRecentViewedContentIds" resultType="java.lang.Long">
+        SELECT content_id
+        FROM (
+            SELECT content_id, create_time
+            FROM user_behavior
+            WHERE anonymous_id = #{anonymousId}
+              AND behavior_type = 1
+            ORDER BY create_time DESC
+        ) AS temp
+        GROUP BY content_id
+        ORDER BY MAX(create_time) DESC
+        LIMIT #{limit}
+    </select>
+
+</mapper>
